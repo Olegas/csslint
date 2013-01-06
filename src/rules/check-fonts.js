@@ -1,3 +1,4 @@
+/*global CSSLint*/
 CSSLint.addRule({
 
     //rule information
@@ -23,11 +24,10 @@ CSSLint.addRule({
         parser.addListener("property", function(event){
 
             var property = event.property,
-                value = event.value,
                 propertyName = property.text.toLowerCase(),
-                valueParts = value.parts,
+                valueParts = event.value.parts,
                 currentRuleFonts = {},
-                i, l, value, type, fontName, line, col;
+                i, l, type, value, fontName, line, col;
 
             if(propertyName == "font" || propertyName == "font-family") {
                 for(i = 0, l = valueParts.length; i < l; i++) {
@@ -43,9 +43,10 @@ CSSLint.addRule({
                     if(currentRuleFonts.hasOwnProperty(i)) {
                         line = currentRuleFonts[i].line;
                         col = currentRuleFonts[i].col;
-                        if(i in macMap && currentRuleFonts[macMap[i]] === undefined)
+                        if(i in macMap && currentRuleFonts[macMap[i]] === undefined) {
                             reporter.warn("No MacOS-alternative for font '" + i + "'. " + 
                                           "Consider adding '" + macMap[i] + "'.", line, col, rule);
+                        }
                     }
                 }
             }
