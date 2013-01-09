@@ -19,7 +19,17 @@ CSSLint.addRule({
                 "Wingdings": "Zapf Dingbats",
                 "MS Sans Serif": "Geneva",
                 "MS Serif": "New York"
-            };
+            },
+            fontFaceRule = false;
+
+        // Disable checking inside @font-face block
+        parser.addListener("startfontface", function(){
+            fontFaceRule = true;
+        });
+
+        parser.addListener("endfontface", function(){
+            fontFaceRule = false;
+        });
 
         parser.addListener("property", function(event){
 
@@ -27,23 +37,25 @@ CSSLint.addRule({
                 propertyName = property.text.toLowerCase(),
                 valueParts = event.value.parts,
                 currentRuleFonts = {},
-                i, l, type, value, fontName, line, col;
+                i, l, value, line, col;
+
+            if(fontFaceRule) {
+                return;
+            }
 
             if(propertyName == "font" || propertyName == "font-family") {
                 for(i = 0, l = valueParts.length; i < l; i++) {
                     value = valueParts[i];
-                    type = value.type;
-                    if(type == 'string' || type == 'identifier') {
-                        fontName = value.text;
-                        currentRuleFonts[fontName] = { line: value.line, col: value.col };
+                    if(value.type == 'identifier') {
+                        currentRuleFonts[value.text] = { line: value.line, col: value.col };
                     }
                 }
-
+console.log(currentRuleFonts);
                 for(i in currentRuleFonts) {
                     if(currentRuleFonts.hasOwnProperty(i)) {
-                        line = currentRuleFonts[i].line;
-                        col = currentRuleFonts[i].col;
                         if(i in macMap && currentRuleFonts[macMap[i]] === undefined) {
+                            line = currentRuleFonts[i].line;
+                            col = currentRuleFonts[i].col;
                             reporter.warn("No MacOS-alternative for font '" + i + "'. " + 
                                           "Consider adding '" + macMap[i] + "'.", line, col, rule);
                         }
