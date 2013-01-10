@@ -32,7 +32,17 @@ CSSLint.addRule({
                 // font-weight related
                 "bold": 6,
                 "bolder": 7,
-                "lighter": 8
+                "lighter": 8,
+                // font-size related
+                "xx-small": 9, 
+                "x-small": 10, 
+                "small": 11, 
+                "medium": 12,
+                "large": 13, 
+                "x-large": 14, 
+                "xx-large": 15,
+                "larger": 16,
+                "smaller": 17
             },
             fontFaceRule = false;
 
@@ -51,6 +61,9 @@ CSSLint.addRule({
             // font-style: normal | italic | oblique | inherit
             // font-variant: normal | small-caps | inherit
             // font-weight: bold|bolder|lighter|normal|100|200|300|400|500|600|700|800|900
+            // font-size: absolute | relative | value | precents | inherit
+            // font-size-absolute: xx-small, x-small, small, medium, large, x-large, xx-large
+            // font-size-relative: larger | smaller
 
             var property = event.property,
                 propertyName = property.text.toLowerCase(),

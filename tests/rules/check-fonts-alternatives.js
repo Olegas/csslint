@@ -60,6 +60,20 @@
       Assert.areEqual(mkErrorMessage("MS Serif", "New York"), result.messages[0].message);
     },
 
+    "Font size (absolute) + family form": function(){
+      var result = CSSLint.verify(".c { font: xx-small MS Serif }", testSpec);
+            
+      Assert.areEqual(1, result.messages.length);
+      Assert.areEqual(mkErrorMessage("MS Serif", "New York"), result.messages[0].message);
+    },
+
+    "Font size (relative) + family form": function(){
+      var result = CSSLint.verify(".c { font: larger MS Serif }", testSpec);
+            
+      Assert.areEqual(1, result.messages.length);
+      Assert.areEqual(mkErrorMessage("MS Serif", "New York"), result.messages[0].message);
+    },
+
     "Font - badly formed rule": function(){
       // This is equal to identifier 'Tahoma Tahoma Tahoma'
       var result = CSSLint.verify(".c { font: 14px Tahoma Tahoma Tahoma }", testSpec);
